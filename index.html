@@ -13,6 +13,91 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 
+
+    <style>
+        :root { --sidebar-width: 288px; }
+
+        /* Control de visibilidad de secciones */
+        .content-section { display: none; }
+        .content-section.active { display: block; animation: fadeIn 0.3s ease-in; }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* SIDEBAR COLAPSABLE Y RESPONSIVO */
+        aside {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 50;
+            flex-shrink: 0;
+        }
+
+        /* Lógica para Escritorio/iPad Landscape */
+        .sidebar-closed aside { margin-left: calc(var(--sidebar-width) * -1); }
+
+        /* Lógica para Móviles y Tablets (iPhone/iPad Portrait) */
+        @media (max-width: 1024px) {
+            aside {
+                position: fixed;
+                height: 100vh;
+                transform: translateX(-100%);
+            }
+            .sidebar-open aside { transform: translateX(0); }
+            
+            /* Overlay oscuro al abrir menú en móvil */
+            .menu-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 40;
+                backdrop-filter: blur(2px);
+            }
+            .sidebar-open .menu-overlay { display: block; }
+        }
+
+        /* BOTÓN HAMBURGUESA FLOTANTE */
+        .menu-toggle {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 60;
+            width: 48px;
+            height: 48px;
+            background: #312e81; /* Indigo 900 */
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            -webkit-tap-highlight-color: transparent; /* Optimización iOS */
+        }
+
+        /* PANTALLA DE AVISO OFFLINE */
+        #offline-notice {
+            display: none; /* Se activa vía JS */
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Mejoras de scroll para iOS */
+        main {
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+
+
+
     <style>
 
     /* Estilos para el efecto Flip Card */
@@ -63,11 +148,40 @@
     </style>
 
 </head>
-<body class="flex h-screen bg-gray-50 text-gray-800">
 
-    <aside class="w-72 bg-indigo-900 text-white flex flex-col shadow-xl">
-        <div class="p-6 border-b border-indigo-800">
-            <h1 class="font-bold text-lg leading-tight">Organization & Functions Guide (DGI)</h1>
+
+
+
+<body class="flex h-screen bg-gray-50 text-gray-800 transition-all overflow-hidden">
+
+
+    <div id="offline-notice">
+        <div class="bg-red-100 p-6 rounded-full mb-4">
+            <svg class="w-16 h-16 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3"></path>
+            </svg>
+        </div>
+        <h2 class="text-2xl font-bold mb-2">Conexión necesaria</h2>
+        <p class="text-gray-600 max-w-sm"> This SITE requires an internet connection to load the design and icons. Please connect and refresh.</p>
+        <button onclick="window.location.reload()" class="mt-6 bg-indigo-900 text-white px-8 py-3 rounded-xl font-bold shadow-lg active:scale-95 transition">
+           CONNECT TO INTERNET AND TRY AGAIN
+        </button>
+    </div>
+
+    <div class="menu-toggle" onclick="toggleSidebar()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </div>
+    
+    <div class="menu-overlay" onclick="toggleSidebar()"></div>
+
+    <aside class="w-72 bg-indigo-900 text-white flex flex-col shadow-xl overflow-hidden">
+        <div class="p-6 border-b border-indigo-800 flex justify-between items-center">
+            <h1 class="font-bold text-lg leading-tight">DGI Manual</h1>
+            <button onclick="toggleSidebar()" class="hidden lg:block opacity-50 hover:opacity-100">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M8 4a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1zM5 8a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 4a1 1 0 100 2h8a1 1 0 100-2H6z"></path></svg>
+            </button>
         </div>
         
         <nav class="flex-1 overflow-y-auto p-4 space-y-2">
@@ -742,7 +856,72 @@
             });
         }
 
+    
+        // --- 1. DETECCIÓN DE ESTADO OFFLINE ---
+        function updateOnlineStatus() {
+            const notice = document.getElementById('offline-notice');
+            // Si el navegador reporta que no hay internet
+            if (!navigator.onLine) {
+                notice.style.display = 'flex'; // Muestra el aviso
+            } else {
+                notice.style.display = 'none'; // Lo oculta
+            }
+        }
 
+        // Escuchadores de eventos para cambios en tiempo real
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        
+        // Verificación inicial al cargar la página
+        updateOnlineStatus();
+
+        // --- 2. CONTROL DEL SIDEBAR (COLAPSABLE) ---
+        function toggleSidebar() {
+            if (window.innerWidth < 1024) {
+                // En móviles: Activa el modo overlay
+                document.body.classList.toggle('sidebar-open');
+            } else {
+                // En escritorio: Recoge el lateral hacia la izquierda
+                document.body.classList.toggle('sidebar-closed');
+            }
+        }
+
+        // --- 3. MEJORA DE NAVEGACIÓN ---
+        // Modifica tu función showSection para que cierre el menú automáticamente en móviles
+        function showSection(id) {
+            // Tu lógica actual para ocultar/mostrar secciones
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(id);
+            if (target) target.classList.add('active');
+
+            // NUEVO: Si estamos en móvil, cierra el menú al hacer clic en una opción
+            if (window.innerWidth < 1024) {
+                document.body.classList.remove('sidebar-open');
+            }
+            
+            // Hacer scroll hacia arriba automáticamente
+            document.querySelector('main').scrollTop = 0;
+        }
+
+        // --- 4. SUBMENÚS ---
+        function toggleSubmenu(id) {
+            const menu = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            
+            menu.classList.toggle('open');
+            
+            // Rotar el icono si existe
+            if (icon) {
+                icon.style.transform = menu.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        }
+
+        // Función para manejar el efecto "Flip" de las tarjetas (si las usas)
+        function toggleFlip(card) {
+            const inner = card.querySelector('.flip-card-inner');
+            inner.classList.toggle('flipped');
+        }
+        
 
     </script>
 </body>
