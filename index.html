@@ -141,10 +141,10 @@
                     </button>
 
                 </div>
-</div>
+            </div>
 
                 
-            </div>
+        </div>
             
                         
                
@@ -157,6 +157,23 @@
                 🚀 DEMOS
             </button>
 
+
+            <div class="mt-4">
+                <button onclick="toggleSubmenu('elements-menu')" 
+                    class="w-full text-left p-3 font-bold text-indigo-300 hover:bg-indigo-800 rounded-lg transition mb-2 border border-indigo-700 flex justify-between items-center">
+                    <span>🧩 SIX ELEMENTS & MODULES</span>
+                    <svg id="icon-elements-menu" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+
+                <div id="elements-menu" class="submenu space-y-1 pl-4">
+                    <button onclick="showElementSection('purpose')" class="w-full text-left p-2 text-sm text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition">• Purpose</button>
+                    <button onclick="showElementSection('data')" class="w-full text-left p-2 text-sm text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition">• Data</button>
+                    <button onclick="showElementSection('tools')" class="w-full text-left p-2 text-sm text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition">• Tools</button>
+                    <button onclick="showElementSection('methodology')" class="w-full text-left p-2 text-sm text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition">• Methodology</button>
+                    <button onclick="showElementSection('people')" class="w-full text-left p-2 text-sm text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition">• People</button>
+                    <button onclick="showElementSection('processes')" class="w-full text-left p-2 text-sm text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition">• Processes</button>
+                </div>
+            </div>
 
            
         </nav>
@@ -456,6 +473,34 @@
             </div>
         </article>
 
+                
+        <article id="elements-section" class="content-section max-w-6xl mx-auto">
+            <div class="mb-10">
+                <h2 id="element-title" class="text-4xl font-black text-indigo-900 uppercase tracking-tight mb-4">Element</h2>
+                
+                <div id="element-def-box" class="bg-indigo-50 border-l-8 border-indigo-500 p-8 rounded-r-2xl shadow-sm transition-all duration-500">
+                    <p id="element-definition" class="text-indigo-900 text-xl leading-relaxed font-medium">
+                        Select an element from the menu to see its definition and topics.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200">
+                <table class="min-w-full divide-y divide-slate-200">
+                    <thead class="bg-slate-800">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-widest">Topic Name</th>
+                            <th class="px-4 py-4 text-center text-xs font-bold text-blue-300 uppercase">SP</th>
+                            <th class="px-4 py-4 text-center text-xs font-bold text-indigo-300 uppercase">LI</th>
+                            <th class="px-4 py-4 text-center text-xs font-bold text-purple-300 uppercase">OSH</th>
+                        </tr>
+                    </thead>
+                    <tbody id="element-table-body" class="divide-y divide-slate-100">
+                        </tbody>
+                </table>
+            </div>
+        </article>
+
 
     </main>
 
@@ -584,6 +629,120 @@
                 alert("There was a connection error. Please check your internet and try again.");
             }
         }
+
+        const elementData = {
+           
+            purpose: {
+                definition: "This element involves ensuring that digital initiatives align with broader organizational or societal goals, comply with laws and standards, and uphold public values.",
+                topics: [
+                    { topic: "Opening plenary: digital governance as the strategic imperative", sp: "X", li: "X", osh: "X" },
+                    { topic: "Digital exclusion and social justice: governing for universal access", sp: "X", li: "", osh: "" },
+                    { topic: "Strategic planning for digital governance in li", sp: "", li: "X", osh: "" },
+                    { topic: "Ethics and algorithmic accountability: governing fairness and bias in sp", sp: "X", li: "", osh: "" },
+                    { topic: "Strategic communication skills for sp leaders: building trust and managing digital change", sp: "X", li: "", osh: "" },
+                    { topic: "Strategic communication skills for osh leaders: building trust and managing digital change", sp: "", li: "", osh: "X" },
+                    { topic: "Managing organizational change in osh digital transformation", sp: "", li: "", osh: "X" },
+                    { topic: "Principles of responsible digital governance", sp: "X", li: "X", osh: "X" },
+                    { topic: "Customer development", sp: "X", li: "X", osh: "X" },
+                    { topic: "Societal development", sp: "X", li: "X", osh: "X" },
+                    { topic: "Corporate development", sp: "X", li: "X", osh: "X" }
+                ]
+            },
+            data: {
+                definition: "Governing data involves managing its use and regulation within an organization to mitigate digital risks such as data misuse, security breaches, or algorithmic bias.",
+                topics: [
+                    { topic: "Analytics and dashboards for decision-making", sp: "", li: "", osh: "X" },
+                    { topic: "Big data analytics for systemic risk identification", sp: "", li: "X", osh: "" },
+                    { topic: "Governing labor market data analytics for enforcement", sp: "", li: "X", osh: "" },
+                    { topic: "Data privacy and ethics: advanced governance", sp: "X", li: "", osh: "" },
+                    { topic: "Data privacy and ethics", sp: "", li: "X", osh: "" },
+                    { topic: "Cybersecurity (securing data integrity)", sp: "X", li: "", osh: "" },
+                    { topic: "Roles and responsibilities in data governance", sp: "X", li: "X", osh: "X" }
+                ]
+            },
+            methodology: {
+                definition: "This refers to the frameworks and approaches (such as human-centered design) used to guide how digital technologies are managed and applied.",
+                topics: [
+                    { topic: "Digital tools for proactive risk management", sp: "", li: "", osh: "X" },
+                    { topic: "Ai in social protection / li / osh", sp: "X", li: "X", osh: "X" },
+                    { topic: "Human-centered design (hcd)", sp: "X", li: "", osh: "X" }
+                ]
+            },
+            tools: {
+                definition: "These are the specific digital technologies and platforms being used, managed, and regulated within the organization or society.",
+                topics: [
+                    { topic: "Tools and open source platforms", sp: "X", li: "X", osh: "" },
+                    { topic: "Digital identity and biometrics governance", sp: "X", li: "", osh: "" },
+                    { topic: "Governance of predictive maintenance tools", sp: "", li: "", osh: "X" }
+                ]
+            },
+            people: {
+                definition: "Described as being 'at the heart of everything,' this element focuses on the individuals, their skills, and the organizational culture necessary for digital governance.",
+                topics: [
+                    { topic: "Human firewall and incident governance", sp: "X", li: "", osh: "" },
+                    { topic: "Strategic communication skills", sp: "X", li: "X", osh: "X" },
+                    { topic: "Managing organizational change", sp: "", li: "", osh: "X" }
+                ]
+            },
+            processes: {
+                definition: "These are the structures, policies, and roles that guide how technologies are utilized and regulated to ensure they remain effective and aligned with the mission.",
+                topics: [
+                    { topic: "Interoperability across systems", sp: "X", li: "X", osh: "X" },
+                    { topic: "Digital automation in workflows", sp: "X", li: "X", osh: "X" },
+                    { topic: "Automation strategies: efficiency to equity", sp: "X", li: "", osh: "" }
+                ]
+            }
+        };
+
+        
+
+        function showElementSection(elementKey) {
+            // 1. Mostrar la sección
+            showSection('elements-section');
+            
+            const data = elementData[elementKey];
+            if (!data) return;
+
+            // 2. Actualizar Título y Definición con efecto visual
+            const titleElement = document.getElementById('element-title');
+            const defElement = document.getElementById('element-definition');
+            const defBox = document.getElementById('element-def-box');
+
+            titleElement.innerText = "Element: " + elementKey.charAt(0).toUpperCase() + elementKey.slice(1);
+            defElement.innerText = data.definition;
+
+            // Animación simple de entrada para la definición
+            defBox.style.opacity = '0';
+            setTimeout(() => {
+                defBox.style.opacity = '1';
+            }, 50);
+
+            // 3. Generar la Tabla
+            const tbody = document.getElementById('element-table-body');
+            tbody.innerHTML = ""; 
+
+            data.topics.forEach(item => {
+                const row = `
+                    <tr class="hover:bg-indigo-50/50 transition border-b border-slate-100">
+                        <td class="px-6 py-5 text-sm font-medium text-slate-700 leading-snug">
+                            ${item.topic.charAt(0).toUpperCase() + item.topic.slice(1)}
+                        </td>
+                        <td class="px-4 py-5 text-center">
+                            ${item.sp === "X" ? '<span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-black ring-1 ring-blue-200">X</span>' : '<span class="text-slate-300">-</span>'}
+                        </td>
+                        <td class="px-4 py-5 text-center">
+                            ${item.li === "X" ? '<span class="inline-block px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-black ring-1 ring-indigo-200">X</span>' : '<span class="text-slate-300">-</span>'}
+                        </td>
+                        <td class="px-4 py-5 text-center">
+                            ${item.osh === "X" ? '<span class="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-lg text-xs font-black ring-1 ring-purple-200">X</span>' : '<span class="text-slate-300">-</span>'}
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+
 
     </script>
 </body>
